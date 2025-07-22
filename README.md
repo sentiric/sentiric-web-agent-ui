@@ -12,6 +12,7 @@
 *   JavaScript/TypeScript (e.g., React, Vue, Angular)
 *   Node.js (for development server)
 *   WebRTC (for real-time voice communication).
+* we can use SvelteKit + Web Workers	WASM ile STT ön işleme
 
 **API Interactions (As an API Client):**
 *   Consumes APIs provided by `sentiric-api-gateway-service` (for `sentiric-agent-service` and other relevant APIs).

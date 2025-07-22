@@ -1,0 +1,13 @@
+
+services:
+  web-agent-ui:
+    image: ${DOCKER_REGISTRY:-ghcr.io/sentiric}/sentiric-web-agent-ui:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL}
+    container_name: sentiric_web_agent_ui
+    ports:
+      - "3001:80"
+    restart: unless-stopped

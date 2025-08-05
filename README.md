@@ -1,38 +1,40 @@
-# Sentiric Web Agent UI
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
-**Description:** A browser-based agent interface for customer service representatives or other end-users to manage voice and text interactions with the Sentiric platform.
+## Getting Started
 
-**Core Responsibilities:**
-*   Initiating and receiving voice calls (potentially using WebRTC and integrating with `sentiric-sip-client-sdk`).
-*   Displaying text responses from `sentiric-agent-service`.
-*   Showing dialogue history and relevant customer/contextual information (fetched via connectors).
-*   Providing a rich user experience for agents.
+First, run the development server:
 
-**Technologies:**
-*   JavaScript/TypeScript (e.g., React, Vue, Angular)
-*   Node.js (for development server)
-*   WebRTC (for real-time voice communication).
-* we can use SvelteKit + Web Workers	WASM ile STT ön işleme
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-**API Interactions (As an API Client):**
-*   Consumes APIs provided by `sentiric-api-gateway-service` (for `sentiric-agent-service` and other relevant APIs).
-*   Communicates with `sentiric-sip-server` via `sentiric-sip-client-sdk` for WebRTC-based SIP/voice streams.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-**Local Development:**
-1.  Clone this repository: `git clone https://github.com/sentiric/sentiric-web-agent-ui.git`
-2.  Navigate into the directory: `cd sentiric-web-agent-ui`
-3.  Install dependencies: `npm install`
-4.  Create a `.env` file from `.env.example` to configure the API Gateway URL.
-5.  Start the development server: `npm start` (or `npm run dev`).
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-**Configuration:**
-Refer to `config/` or `src/` directories and `.env.example` for UI-specific configurations.
+[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-**Deployment:**
-This is a frontend application, typically deployed as static files served by a web server (e.g., Nginx) or a CDN. Refer to `sentiric-infrastructure`.
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
 
-**Contributing:**
-We welcome contributions! Please refer to the [Sentiric Governance](https://github.com/sentiric/sentiric-governance) repository for coding standards and contribution guidelines.
+This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-**License:**
-This project is licensed under the [License](LICENSE).
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.

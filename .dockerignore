@@ -1,0 +1,12 @@
+# Dependency directories
+node_modules
+.next
+out
+
+# Logs
+npm-debug.log*
+
+# Local env files
+.env
+.env.local
+.env.example

@@ -12,20 +12,26 @@ services:
         args:
           SERVICE_NAME: sentiric-web-agent-ui
 
-      env_file: 
-        - ./.env
+      env_file:
+        - ./.env.docker
 
       # volumes:
       #   - ../sentiric-infrastructure/tls/certs:/etc/sentiric/tls:ro
 
       ports:
-        - "${WEB_AGENT_UI_PORT}:${WEB_AGENT_UI_PORT}"
+        - "${WEB_AGENT_UI_PORT}:80"
 
       networks:
         - sentiric-net
       
       profiles:
         - default
-        - ai
+        - ui
 
       restart: always
+
+    # DÜZELTME: Bu arayüzün çalışması için şu anlık bir backend
+    # bağımlılığı yok. Gelecekte api-gateway'e bağımlı olacak.
+    # Şimdilik depends_on'u kaldırarak daha basit bir başlangıç yapalım.
+    # depends_on:
+    #   - api-gateway-service      

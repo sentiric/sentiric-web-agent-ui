@@ -1,47 +1,56 @@
-# 🖥️ Sentiric Web Agent UI - Görev Listesi
+# 🖥️ Sentiric Web Agent UI - Geliştirme Yol Haritası (v4.0)
 
-Bu belge, `web-agent-ui`'nin geliştirme yol haritasını ve önceliklerini tanımlar.
-
----
-
-### Faz 1: Arayüz İskeleti ve Statik Simülasyon (Mevcut Durum)
-
-Bu faz, arayüzün temel bileşenlerini oluşturmayı ve sahte (mock) verilerle çalışır bir prototip sunmayı hedefler.
-
--   [x] **Next.js Proje Kurulumu:** Modern, TypeScript tabanlı proje yapısı.
--   [x] **Temel Layout:** Sidebar ve TopBar'ı içeren ana uygulama düzeni.
--   [x] **Workspace Mimarisi:** Üç sütunlu (Kuyruk, Aktif Çağrı, Müşteri Bilgisi) çalışma alanı tasarımı.
--   [x] **Durum Yönetimi (`Zustand`):** Çağrıları, aktif çağrıyı ve transkripti yöneten merkezi bir state store.
--   [x] **Sahte Veri Simülasyonu (`useRealtime`):** API bağlantısı olmadan arayüzü canlı göstermek için periyodik olarak yeni çağrılar ve transkriptler üreten bir mekanizma.
+Bu belge, `web-agent-ui`'nin geliştirme görevlerini projenin genel fazlarına uygun olarak listeler.
 
 ---
 
-### Faz 2: Gerçek Zamanlı API Entegrasyonu (Sıradaki Öncelik)
+### **FAZ 1: Arayüz İskeleti ve Statik Simülasyon (Mevcut Durum)**
 
-Bu faz, arayüzü sahte verilerden arındırıp, `api-gateway` üzerinden gelen canlı verilerle çalışır hale getirmeyi hedefler.
+**Amaç:** Arayüzün temel bileşenlerini ve düzenini oluşturmak, API olmadan da geliştirme ve demo yapabilmek.
 
--   [ ] **Görev ID: UI-AGENT-001 - WebSocket Bağlantısı**
-    -   **Açıklama:** Uygulama başladığında `api-gateway`'e bir WebSocket bağlantısı kur. `useRealtime` hook'unu bu gerçek zamanlı bağlantıyı kullanacak şekilde yeniden yaz. Gelen yeni çağrı, durum değişikliği ve transkript olaylarını dinleyerek Zustand store'unu güncelle.
-    -   **Durum:** ⬜ Planlandı.
-
--   [ ] **Görev ID: UI-AGENT-002 - Çağrı Devralma API Çağrısı**
-    -   **Açıklama:** "Devral" butonuna tıklandığında, sadece arayüzdeki durumu değiştirmekle kalma, aynı zamanda `api-gateway`'e çağrıyı devralma isteği gönderen bir API çağrısı yap.
-    -   **Durum:** ⬜ Planlandı.
-
--   [ ] **Görev ID: UI-AGENT-003 - Fısıldama (Whisper) API Çağrısı**
-    -   **Açıklama:** "Fısılda" input alanına yazılan metni, `api-gateway` üzerinden `agent-service`'e gönderen bir API çağrısı yap.
-    -   **Durum:** ⬜ Planlandı.
+-   [x] **Görev ID: UI-CORE-01 - Next.js Proje Kurulumu ve Temel Layout**
+    -   **Durum:** ✅ **Tamamlandı**
+-   [x] **Görev ID: UI-CORE-02 - Üç Sütunlu Workspace Mimarisi**
+    -   **Durum:** ✅ **Tamamlandı**
+-   [x] **Görev ID: UI-CORE-03 - Zustand ile Durum Yönetimi**
+    -   **Durum:** ✅ **Tamamlandı**
+-   [x] **Görev ID: UI-CORE-04 - Sahte Veri Simülasyonu**
+    -   **Durum:** ✅ **Tamamlandı**
 
 ---
 
-### Faz 3: WebRTC ile Sesli İletişim
+### **FAZ 2: Gerçek Zamanlı API Entegrasyonu (Sıradaki Öncelik)**
 
-Bu faz, agent'ların doğrudan tarayıcı üzerinden konuşmasını sağlamayı hedefler.
+**Amaç:** Arayüzü sahte verilerden arındırıp, `api-gateway` üzerinden gelen canlı verilerle çalışır hale getirmek.
+
+-   [ ] **Görev ID: UI-AGENT-001 - Gerçek Zamanlı Olay Akışı (WebSocket)**
+    -   **Açıklama:** `useRealtime` hook'unu, `api-gateway`'e bağlanan gerçek bir WebSocket istemcisiyle değiştir. Gelen olayları dinleyerek Zustand store'unu güncelle.
+    -   **Kabul Kriterleri:**
+        -   [ ] Uygulama yüklendiğinde, `api-gateway`'e başarılı bir WebSocket bağlantısı kurulmalıdır.
+        -   [ ] Gateway'den `yeni_cagri_kuyrukta` olayı geldiğinde, bu çağrı anında arayüzdeki "Kuyruk" listesine eklenmelidir.
+        -   [ ] Gateway'den `yeni_transkript_eklendi` olayı geldiğinde, bu transkript anında "Aktif Çağrı" panelindeki konuşma geçmişine eklenmelidir.
+
+-   [ ] **Görev ID: UI-AGENT-002 - Çağrı Yönetimi Eylemleri (REST API)**
+    -   **Açıklama:** "Devral", "Kapat", "Fısılda" gibi butonlara basıldığında, ilgili API endpoint'lerine doğru isteklerin gönderilmesini sağla.
+    -   **Kabul Kriterleri:**
+        -   [ ] "Devral" butonuna tıklandığında, `POST /api/v1/calls/{call_id}/takeover` isteği gönderilmelidir.
+        -   [ ] "Fısılda" input alanına metin girilip gönderildiğinde, `POST /api/v1/calls/{call_id}/whisper` isteği `{ "text": "..." }` gövdesiyle gönderilmelidir.
+        -   [ ] API çağrılarının başarılı veya başarısız olma durumlarına göre kullanıcıya görsel geri bildirim (notification/toast) gösterilmelidir.
+
+---
+
+### **FAZ 3: Tarayıcı Üzerinden Sesli İletişim (WebRTC)**
+
+**Amaç:** Temsilcilerin harici bir softphone'a ihtiyaç duymadan, doğrudan tarayıcı üzerinden müşteriyle konuşmasını sağlamak.
 
 -   [ ] **Görev ID: UI-AGENT-004 - `sentiric-sip-client-sdk` Entegrasyonu**
-    -   **Açıklama:** WebRTC tabanlı SIP istemci SDK'sını arayüze entegre et. Agent giriş yaptığında, arka planda SIP sunucusuna register ol.
-    -   **Durum:** ⬜ Planlandı.
+    -   **Açıklama:** WebRTC tabanlı SIP istemci SDK'sını arayüze entegre et. Temsilci giriş yaptığında, arka planda SIP sunucusuna `REGISTER` olmasını sağla.
+    -   **Kabul Kriterleri:**
+        -   [ ] Temsilci başarılı bir şekilde giriş yaptığında, SDK aracılığıyla `REGISTER` işlemi tamamlanmalı ve arayüzde "Bağlantı Kuruldu" gibi bir gösterge belirmelidir.
+        -   [ ] Bir çağrı devralındığında (`takeover` API çağrısı sonrası), SDK aracılığıyla gelen `INVITE` isteği kabul edilmeli ve tarayıcıda sesli iletişim kanalı açılmalıdır.
 
 -   [ ] **Görev ID: UI-AGENT-005 - Çağrı Kontrol Butonları**
-    -   **Açıklama:** "Sessize Al", "Beklemeye Al", "Kapat" gibi butonların, SDK aracılığıyla gerçek WebRTC ses akışını kontrol etmesini sağla.
-    -   **Durum:** ⬜ Planlandı.
+    -   **Açıklama:** "Sessize Al" (`Mute`), "Beklemeye Al" (`Hold`), "Kapat" (`Hangup`) gibi butonların, SDK aracılığıyla gerçek WebRTC ses akışını kontrol etmesini sağla.
+    -   **Kabul Kriterleri:**
+        -   [ ] "Sessize Al" butonuna basıldığında, SDK'nın `mute()` fonksiyonu çağrılmalı ve müşteriye ses gitmemelidir.
+        -   [ ] "Kapat" butonuna basıldığında, SDK'nın `hangup()` fonksiyonu çağrılmalı ve hem arayüzde hem de arka uçta çağrı sonlandırılmalıdır.

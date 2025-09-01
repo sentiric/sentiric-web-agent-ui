@@ -2,6 +2,29 @@
 
 **Belge Amacı:** Bu doküman, `web-agent-ui`'nin Sentiric platformunda **insan ve yapay zeka işbirliğinin gerçekleştiği kokpit** olarak stratejik rolünü, temel çalışma prensiplerini ve `api-gateway` ile olan gerçek zamanlı iletişimini açıklar.
 
+# Görev Tanımı: Çağrı Kayıtlarını Arayüzde Oynatma
+
+-   **Servis:** `frontend-service`
+-   **Bağımlılık:** `cdr-service`'in `/api/calls/{call_id}/recording/play` endpoint'ini hazır hale getirmesi.
+-   **Amaç:** Kullanıcının, Çağrı Detayları sayfasında, bir çağrı kaydını standart bir medya oynatıcı (play, pause, ses ayarı, ilerleme çubuğu) ile dinlemesini sağlamak.
+-   **Mimari ve Sorumluluklar:**
+    -   Frontend'in görevi, ses formatları, resampling (yeniden örnekleme) veya S3 gibi altyapı detaylarını **bilmemektir.**
+    -   Frontend, sadece `cdr-service` tarafından sağlanan tek bir API endpoint'ini çağırır.
+    -   Bu endpoint, tarayıcının doğrudan oynatabileceği standart bir ses akışı (`audio/mpeg`, `audio/wav` vb.) döndürecektir. Frontend bu akışı alıp HTML `<audio>` elementine beslemekle sorumludur.
+-   **Uygulama Adımları:**
+    -   [ ] **1. UI Bileşeni (Component) Geliştirme:**
+        -   [ ] Çağrı detay verisi içinde `recording_uri` alanı dolu ise, bir `CallRecordingPlayer` bileşeni gösterilmelidir.
+        -   [ ] Bu bileşen; bir "Oynat/Durdur" butonu, bir ilerleme çubuğu (progress bar), süre göstergeleri ve ses kontrolü içermelidir. Standart bir HTML `<audio>` elementinin kontrolleri başlangıç için yeterlidir.
+    -   [ ] **2. API Entegrasyonu:**
+        -   [ ] "Oynat" butonuna tıklandığında, frontend `cdr-service`'in sunduğu `GET /api/calls/{call_id}/recording/play` endpoint'ine bir `fetch` veya `axios` isteği yapmalıdır.
+    -   [ ] **3. Ses Akışını Oynatma:**
+        -   [ ] API'den gelen yanıt (response), bir ses dosyası akışıdır. Bu akış, bir `Blob` (Binary Large Object) olarak ele alınmalıdır.
+        -   [ ] Bu `Blob`, `URL.createObjectURL()` metodu kullanılarak tarayıcının anlayabileceği geçici bir URL'e dönüştürülmelidir.
+        -   [ ] Oluşturulan bu obje URL'i, `<audio>` elementinin `src` özelliğine atanmalı ve ardından `.play()` metodu çağrılarak oynatma başlatılmalıdır.
+    -   [ ] **4. Durum Yönetimi (State Management):**
+        -   [ ] Ses yüklenirken bir yüklenme göstergesi (spinner) gösterilmelidir (`isLoading`).
+        -   [ ] API'den bir hata (örn: 404 Kayıt Bulunamadı) dönerse, kullanıcıya bir hata mesajı gösterilmelidir (`error`).
+        
 ---
 
 ## 1. Stratejik Rol: "İnsan-AI İşbirliği Kokpiti"
@@ -51,3 +74,4 @@ sequenceDiagram
     ApiGateway-->>AgentUI: (WebSocket) Olay: { type: "cagri_devralindi", data: {...} }
     Note over AgentUI: Çağrıyı "Aktif Çağrı" sütununa taşır, <br> sesli iletişim için WebRTC'yi aktif eder.
 ```
+

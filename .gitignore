@@ -30,8 +30,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# Ortam dosyaları
+.env
+!.env.example          # örnek config dosyasını tut
+
+# Çalışma zamanı veya geçici dosyalar
+.env.generated
+.profile.state
 
 # vercel
 .vercel
